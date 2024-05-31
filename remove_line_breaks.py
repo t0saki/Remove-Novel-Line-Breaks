@@ -9,7 +9,7 @@ import logging
 from datetime import datetime
 
 # Configure logging
-log_filename = datetime.now().strftime("log_%Y-%m-%d.log")
+log_filename = datetime.now().strftime("log_%Y-%m-%d_%H-%M-%S.log")
 logging.basicConfig(
     filename=log_filename,
     filemode='a',  # Append to the log file
