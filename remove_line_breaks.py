@@ -49,15 +49,15 @@ def remove_unwanted_line_breaks(text, range_size=1, frequency_threshold=0.1, end
 
     if best_range == (0, 0):
         logging.warning(
-            f"{file_name}: No suitable line length range found based on the given frequency threshold."
+            f"{file_name}: No suitable line length range found based on the given frequency threshold.")
         return text
 
     logging.info(
         f"{file_name}: Most common line length range: {best_range}")
 
-    merged_lines=[]
-    buffer=""
-    previous_line=""
+    merged_lines = []
+    buffer = ""
+    previous_line = ""
 
     for line in lines:
         if len(previous_line) in range(best_range[0], best_range[1] + 1) and (not previous_line or not re.search(end_punctuation, previous_line[-1])):
@@ -65,9 +65,9 @@ def remove_unwanted_line_breaks(text, range_size=1, frequency_threshold=0.1, end
         else:
             if buffer:
                 merged_lines.append(buffer)
-            buffer=line
+            buffer = line
 
-        previous_line=line
+        previous_line = line
 
     if buffer:
         merged_lines.append(buffer)
@@ -77,18 +77,18 @@ def remove_unwanted_line_breaks(text, range_size=1, frequency_threshold=0.1, end
 
 def detect_encoding(file_path):
     with open(file_path, 'rb') as f:
-        raw_data=f.read()
-    result=chardet.detect(raw_data)
+        raw_data = f.read()
+    result = chardet.detect(raw_data)
     return result['encoding']
 
 
 def process_file(args):
-    input_file, output_file, range_size, frequency_threshold, end_punctuation=args
-    encoding=detect_encoding(input_file)
+    input_file, output_file, range_size, frequency_threshold, end_punctuation = args
+    encoding = detect_encoding(input_file)
     with open(input_file, 'r', encoding=encoding, errors='ignore') as f:
-        text=f.read()
+        text = f.read()
 
-    cleaned_text=remove_unwanted_line_breaks(
+    cleaned_text = remove_unwanted_line_breaks(
         text, range_size, frequency_threshold, end_punctuation, os.path.basename(input_file))
 
     os.makedirs(os.path.dirname(output_file), exist_ok=True)
@@ -99,13 +99,13 @@ def process_file(args):
 
 
 def process_folder(input_folder, output_folder, range_size, frequency_threshold, end_punctuation):
-    tasks=[]
+    tasks = []
     for root, _, files in os.walk(input_folder):
         for file in files:
             if file.endswith('.txt'):
-                input_file=os.path.join(root, file)
-                relative_path=os.path.relpath(input_file, input_folder)
-                output_file=os.path.join(output_folder, relative_path)
+                input_file = os.path.join(root, file)
+                relative_path = os.path.relpath(input_file, input_folder)
+                output_file = os.path.join(output_folder, relative_path)
                 tasks.append((input_file, output_file, range_size,
                              frequency_threshold, end_punctuation))
 
@@ -114,7 +114,7 @@ def process_folder(input_folder, output_folder, range_size, frequency_threshold,
 
 
 if __name__ == '__main__':
-    parser=argparse.ArgumentParser(
+    parser = argparse.ArgumentParser(
         description='Remove unwanted line breaks in text files within a folder.')
     parser.add_argument('input_folder', type=str,
                         help='Input folder containing text files')
@@ -127,7 +127,7 @@ if __name__ == '__main__':
     parser.add_argument('--end-punctuation', type=str, default='[。.!?，,；;：“”‘’""\'\'（）()]',
                         help='Regex pattern for punctuation that indicates the end of a line')
 
-    args=parser.parse_args()
+    args = parser.parse_args()
 
     process_folder(args.input_folder, args.output_folder,
                    args.range_size, args.frequency_threshold, args.end_punctuation)
