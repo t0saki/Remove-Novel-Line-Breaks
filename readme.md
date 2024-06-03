@@ -16,7 +16,7 @@
 2. 运行脚本：
 
     ```bash
-    python remove_line_breaks.py example.txt output.txt
+    python remove_line_breaks.py input_dir output_dir
     ```
 
 建议calibre勾选智能处理后转换为epub，以优化排版。
